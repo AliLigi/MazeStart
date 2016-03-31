@@ -1,30 +1,38 @@
 package ie.gmit.sw.ai;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.JFrame;
+import ie.gmit.sw.ai.maze.*;
 
-import ie.gmit.sw.ai.maze.MazeTemplate;
+//import ie.gmit.sw.ai.maze.MazeTemplate;
 
 
 public class GameRunner implements KeyListener{
 	
-	
-	private static final int MAZE_DIMENSION = 100;
-	private char[][] model;
-	private char[][]enemy;
+	private static final int MAZE_DIMENSION = 20;
+	private Node[][] model;
+	//private char[][]enemy;
 	private GameView view;
 	private int currentRow;
 	private int currentCol;
 	
 	public GameRunner() throws Exception{
+		MazeGenerator m = new EllersAlgoMaze();
+		m.buildTheMaze(MAZE_DIMENSION, MAZE_DIMENSION);
+		model = m.getTheMaze();
+    	view = new GameView(model);
+    	
+    	placePlayer();
 		
-		Enemy e = new Enemy(5, 5);
-		MazeTemplate m = new MazeTemplate(MAZE_DIMENSION, MAZE_DIMENSION);
-		model = m.getMaze();
-		enemy = e.getEnemy();
+		//Enemy e = new Enemy(5, 5);
+		//MazeTemplate m = new MazeTemplate(MAZE_DIMENSION, MAZE_DIMENSION);
+		//model = m.getMaze();
+		//enemy = e.getEnemy();
 		
-    	view = new GameView(model,enemy );
+    	//view = new GameView(model,enemy );
     	
     	placePlayer();
     	
@@ -47,9 +55,8 @@ public class GameRunner implements KeyListener{
 	private void placePlayer(){   	
     	currentRow = (int) (MAZE_DIMENSION * Math.random());
     	currentCol = (int) (MAZE_DIMENSION * Math.random());
-    	model[currentRow][currentCol] = 'E';
-    	enemy[currentRow][currentCol] = 'H';
-    	updateView(); 		
+    	model[currentRow][currentCol].setNodeTypes('E');
+    	updateView(); 	 		
 	}
 	
 	private void updateView(){
@@ -78,15 +85,19 @@ public class GameRunner implements KeyListener{
 	public void keyTyped(KeyEvent e) {} //Ignore
 
     
-	private boolean isValidMove(int r, int c){
-		if (r <= model.length - 1 && c <= model[r].length - 1 && model[r][c] == ' '){
-			model[currentRow][currentCol] = ' ';
-			model[r][c] = 'E';
-			return true;
-		}else{
-			return false; //Can't move
+	private boolean isValidMove(int r, int c)
+		{
+			if (r <= model.length - 1 && c <= model[r].length - 1 && model[r][c].getNodeTypes() == ' ')
+			{
+				model[currentRow][currentCol].setNodeTypes(' ');
+				model[r][c].setNodeTypes('E');
+				return true;
+			}
+			else
+			{
+				return false; //Can't move
+			}
 		}
-	}
 	
 	
 	public static void main(String[] args) throws Exception{

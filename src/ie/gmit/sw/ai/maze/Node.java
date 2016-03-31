@@ -7,7 +7,7 @@ public class Node
 	public enum Direction {North, South, East, West};
 	private Node parent;
 	private boolean startingCell = false;
-	private Color color = Color.YELLOW;
+	private Color color = Color.BLACK;
 	private Direction[] paths = null;
 	private Set<Node> nodeSet;
 	public boolean visit=  false;
@@ -169,7 +169,7 @@ public class Node
 	}
 
 	public void setVisited(boolean visited) {
-		this.color = Color.GREEN;
+		this.color = Color.BLUE;
 		this.visit = visited;
 	}
 

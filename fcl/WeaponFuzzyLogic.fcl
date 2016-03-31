@@ -1,31 +1,28 @@
 FUNCTION_BLOCK Weapon
 	
 	VAR_INPUT
-	 	IQ : REAL;
-	 	qualifications: REAL;
-	 	work: REAL;
-	 	techScreen: REAL;
-	
+	 	weapon : REAL;
+	 	opponent: REAL;
+	 	
 	END_VAR
 	
 	VAR_OUTPUT
- 		salary : REAL;
+ 		victory : REAL;
 	END_VAR
 	
-	FUZZIFY IQ
- 		TERM high := GBELL 90 120 150;
-		TERM average := GBELL 80 100 120;
- 		TERM low := GBELL 10 20 80;
+	FUZZIFY weapon
+ 		TERM powerful := GBELL 90 120 150;
+		TERM normal := GBELL 80 100 120;
+ 		TERM weak := GBELL 10 20 80;
 	END_FUZZIFY
 	
-	FUZZIFY qualifications
- 		TERM none := (0, 1) (2, 0);
- 		TERM little := TRIAN 1 4 6;
- 		TERM well := TRIAN 7 7.5 8;
- 		TERM high := (9, 0) (10, 1);
+	FUZZIFY enemy
+ 		TERM weak := TRIAN 1 2 3;
+ 		TERM normal := TRIAN 7 7.5 8;
+ 		TERM powerful := (9, 0) (10, 1);
 	END_FUZZIFY
 	
-	DEFUZZIFY risk
+	DEFUZZIFY victory
  		TERM low := (0, 1) (45, 0);
  		TERM normal := gbell 20.0 50.0 80.0;
  		TERM high := (55, 0) (100, 1);
@@ -37,7 +34,11 @@ FUNCTION_BLOCK Weapon
 		 AND : MIN;
 		 ACT : MIN;
 		 ACCU : MAX;
-		 RULE 4 : IF staffing IS large THEN risk IS high;
+		 RULE 1: IF weapon IS powerful THEN enemy IS weak;
+		 RULE 2: IF weapon IS weak OR enemy IS powerful THEN victory IS low;
+		 RULE 4: IF weapon IS powerful AND enemy IS weak THEN victory IS high;
+		 RULE 5: IF enemy IS powerful THEN victory IS low;
+		 RULE 6: IF enemy IS weak AND weapon IS NOT weak THEN victory IS high;
 		
 	END_RULEBLOCK
 

@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import ie.gmit.sw.ai.maze.MazeTemplate;
+
 
 public class GameRunner implements KeyListener{
 	
@@ -18,7 +20,7 @@ public class GameRunner implements KeyListener{
 	public GameRunner() throws Exception{
 		
 		Enemy e = new Enemy(5, 5);
-		Maze m = new Maze(MAZE_DIMENSION, MAZE_DIMENSION);
+		MazeTemplate m = new MazeTemplate(MAZE_DIMENSION, MAZE_DIMENSION);
 		model = m.getMaze();
 		enemy = e.getEnemy();
 		
@@ -85,6 +87,7 @@ public class GameRunner implements KeyListener{
 			return false; //Can't move
 		}
 	}
+	
 	
 	public static void main(String[] args) throws Exception{
 		new GameRunner();

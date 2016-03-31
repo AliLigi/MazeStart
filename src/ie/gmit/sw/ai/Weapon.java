@@ -20,8 +20,9 @@ public class Weapon {
 		 fis.setVariable("enemy", enemy.getStrength());
 		 fis.evaluate();
 		 double victory = fis.getVariable("victory").getValue();
-		 this.getLifeForce() = this.getLifeForce() * victory;
-		//System.out.println(fis.getVariable("risk").getValue()); //Output end result
+		 //this.getLifeForce() = this.getLifeForce() * victory;
+		//System.out.println(fis.getVariable("victory").getValue()); //Output end result
+		return true;
 	}
 
 	private double getPower() {

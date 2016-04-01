@@ -23,6 +23,10 @@ public class RecursiveBacktrakingAlgo implements MazeGenerator{
 			this.maze = maze;
 			//buildTheMaze();
 		}
+		public Node[][] getTheMaze() {
+			return this.maze;
+		}
+
 		
 		// Initializing each Node
 		// Starting  maze in grid pattern
@@ -111,11 +115,7 @@ public class RecursiveBacktrakingAlgo implements MazeGenerator{
 			return wall;
 		}
 
-		public Node[][] getTheMaze() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
+		
 	
 	 }
 

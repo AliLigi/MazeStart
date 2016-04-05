@@ -114,5 +114,10 @@ public class EllersAlgoMaze implements MazeGenerator{
 			}
 			return available;
 		}
+		@Override
+		public Node getingNode() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 

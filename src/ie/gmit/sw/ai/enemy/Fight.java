@@ -16,7 +16,7 @@ public class Fight {
 		public int fight(Enemy e, int weapon) {
 	        FIS fis = FIS.load(FCL_FILE_NAME,true);
 	        FunctionBlock functionBlock = fis.getFunctionBlock("Weapon");
-	        fis.setVariable("enemy", e.getStrength());
+	        //fis.setVariable("enemy", e.getStrength());
 	        fis.setVariable("victory", weapon);
 	        
 	        Variable victory = functionBlock.getVariable("victory");

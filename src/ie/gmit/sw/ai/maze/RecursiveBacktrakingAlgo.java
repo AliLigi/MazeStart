@@ -114,6 +114,11 @@ public class RecursiveBacktrakingAlgo implements MazeGenerator{
 			}
 			return wall;
 		}
+		@Override
+		public Node getingNode() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 		
 	

@@ -7,7 +7,7 @@ public class Node
 	public enum Direction {North, South, East, West};
 	private Node parent;
 	private boolean startingCell = false;
-	private Color color = Color.BLACK;
+	private Color color = Color.BLUE;
 	private Direction[] paths = null;
 	private Set<Node> nodeSet;
 	public boolean visit=  false;
@@ -135,15 +135,16 @@ public class Node
 		return (Node[]) children.toArray(new Node[children.size()]);
 	}
 
-	public Node[] adjacentNodes(Node[][] maze){
-		java.util.List<Node> adjacents = new java.util.ArrayList<Node>();
+	public ArrayList<Node> adjacentNodes(Node[][] maze)
+	{
+		ArrayList<Node> adjacent = new ArrayList<Node>();
+		//System.out.println("ROW " + row + " COL " + col);
+		if (row-1 > 0) adjacent.add(maze[row - 1][col]); //Add North
+		if (row+1 < maze.length) adjacent.add(maze[row + 1][col]); //Add South
+		if (col-1 > 0) adjacent.add(maze[row][col - 1]); //Add West
+		if (col+1 < maze[row].length) adjacent.add(maze[row][col + 1]); //Add East
 		
-		if (row > 0) adjacents.add(maze[row - 1][col]); //Add North
-		if (row < maze.length - 1) adjacents.add(maze[row + 1][col]); //Add South
-		if (col > 0) adjacents.add(maze[row][col - 1]); //Add West
-		if (col < maze[row].length - 1) adjacents.add(maze[row][col + 1]); //Add East
-		
-		return (Node[]) adjacents.toArray(new Node[adjacents.size()]);
+		return adjacent;
 	}
 	
 	public Direction[] getPaths() {
@@ -169,7 +170,7 @@ public class Node
 	}
 
 	public void setVisited(boolean visited) {
-		this.color = Color.BLUE;
+		this.color = Color.pink;
 		this.visit = visited;
 	}
 

@@ -8,9 +8,9 @@ public class Player {
 	private Weapon weapon;
 	private int victory = 100;
 	
-	public Player(Node currentNode) {
-		this.currentNode = currentNode;
-	}
+	//public Player(Node currentNode) {
+	//	this.currentNode = currentNode;
+	//}
 	
 	public Node getCurrentNode() {
 		return currentNode;

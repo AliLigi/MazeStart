@@ -13,7 +13,7 @@ public class GameView extends JPanel implements ActionListener{
 	
 	private static final long serialVersionUID = 1L;
 	public static final int DEFAULT_VIEW_SIZE = 800;	
-	private static final int IMAGE_COUNT = 8;
+	private static final int IMAGE_COUNT = 10;
 	private int cellspan = 5;	
 	private int cellpadding = 2;
 	private Node maze[][];
@@ -24,6 +24,7 @@ public class GameView extends JPanel implements ActionListener{
 	private int currentCol;
 	private boolean zoomOut = false;
 	private int imageIndex = -1;
+	private int size = DEFAULT_VIEW_SIZE/cellspan;
 	
 	public GameView(Node[][] maze) throws Exception
 	{
@@ -66,6 +67,69 @@ public class GameView extends JPanel implements ActionListener{
 			currentCol = col;
 		}
 	}
+	
+	public void defineMapColours(int row, int col, Graphics2D g2)
+	{
+		int x1 = col * size;
+		int y1 = row * size;
+		char ch = maze[row][col].getNodeTypes();
+		
+   		if (ch == 'X')
+		{        			
+   			g2.setColor(Color.GREEN);
+			g2.fillRect(x1, y1, size, size);
+		}
+		else if (ch == ' ')
+		{
+			g2.setColor(Color.BLACK);
+			g2.fillRect(x1, y1, size, size);
+		}
+		else if (ch == 'W')
+		{
+			g2.setColor(Color.BLUE);
+			g2.fillRect(x1, y1, size, size);
+		}
+		else if (ch == '?')
+		{
+			g2.setColor(Color.LIGHT_GRAY);
+			g2.fillRect(x1, y1, size, size);
+		}
+		else if (ch == 'B')
+		{
+			g2.setColor(Color.RED);
+			g2.fillRect(x1, y1, size, size);
+		}
+		else if (ch == 'H')
+		{
+			g2.setColor(Color.WHITE);
+			g2.fillRect(x1, y1, size, size);
+		}
+		else if (ch == 'E')
+		{
+			g2.setColor(Color.ORANGE);
+			g2.fillRect(x1, y1, size, size);  			
+		}
+		else if (ch == 'G')
+		{
+			g2.setColor(Color.YELLOW);
+			g2.fillRect(x1, y1, size, size);  			
+		}
+		else if (ch == 'V')
+		{
+			g2.setColor(Color.PINK);
+			g2.fillRect(x1, y1, size, size);    			
+		}
+		else if (ch == 'C')
+		{
+			g2.setColor(Color.DARK_GRAY);
+			g2.fillRect(x1, y1, size, size);   			
+		}
+		else
+		{
+			g2.setColor(Color.LIGHT_GRAY);
+			g2.fillRect(x1, y1, size, size);
+		}
+	}
 
 	public void paintComponent(Graphics g)
 	{
@@ -73,13 +137,14 @@ public class GameView extends JPanel implements ActionListener{
         Graphics2D g2 = (Graphics2D)g;
               
         cellspan = zoomOut ? maze.length : 5;         
-        final int size = DEFAULT_VIEW_SIZE/cellspan;
+        //final int size = DEFAULT_VIEW_SIZE/cellspan;
         g2.drawRect(0, 0, GameView.DEFAULT_VIEW_SIZE, GameView.DEFAULT_VIEW_SIZE);
         
         for(int row = 0; row < cellspan; row++) 
         {
         	for (int col = 0; col < cellspan; col++)
         	{  
+        		size = DEFAULT_VIEW_SIZE/cellspan;
         		int x1 = col * size;
         		int y1 = row * size;
         		
@@ -88,12 +153,8 @@ public class GameView extends JPanel implements ActionListener{
         		if (zoomOut)
         		{
         			ch = maze[row][col].getNodeTypes();
-        			if (row == currentRow && col == currentCol)
-        			{
-        				g2.setColor(Color.YELLOW);
-        				g2.fillRect(x1, y1, size, size);
-        				continue;
-        			}
+        			size = DEFAULT_VIEW_SIZE/cellspan;
+        			defineMapColours(row, col, g2);
         		}
         		else
         		{
@@ -156,11 +217,11 @@ public class GameView extends JPanel implements ActionListener{
 	{	
 		if (enemy_state < 0 || enemy_state == 5)
 		{
-			enemy_state = 6;
+			enemy_state = 5;
 		}
 		else
 		{
-			enemy_state = 5;
+			enemy_state = 6;
 		}
 		
 		this.repaint();
@@ -173,7 +234,10 @@ public class GameView extends JPanel implements ActionListener{
 		images[2] = ImageIO.read(new java.io.File("resources/help.png"));
 		images[3] = ImageIO.read(new java.io.File("resources/bomb.png"));
 		images[4] = ImageIO.read(new java.io.File("resources/h_bomb.png"));
+		//images[7] = ImageIO.read(new java.io.File("resources/spidermanUp.png"));
+		//images[8] = ImageIO.read(new java.io.File("resources/spiderManDown.png"));
 		images[5] = ImageIO.read(new java.io.File("resources/spider_down.png"));
 		images[6] = ImageIO.read(new java.io.File("resources/spider_up.png"));
+		
 	}
 }

@@ -11,6 +11,7 @@ public class EllersAlgoMaze implements MazeGenerator{
 	// Eller's algorithm creates 'perfect' mazes, having only a single path between any two cells, one row at a time
 	// here is a simple algo 
 	
+	
 		private Node[][] maze;
 		private Random randNumber = new Random();
 		private Set<Set<Node>> tempSets = new HashSet<Set<Node>>();

@@ -15,6 +15,8 @@ import net.sourceforge.jFuzzyLogic.rule.Variable;
 public class Fight {
 	//http://www.tutorialspoint.com/java/java_multithreading.htm facilitating me with info on fuzzy logic
 	//most of the code is from past projects mixed with the Internet information 
+	
+	
 	private boolean gameFinished;
 	private int DEFAULT_VIEW_SIZE;
 	private static final String FCL_FILE_NAME = "fcl/FightEvaluator.fcl";

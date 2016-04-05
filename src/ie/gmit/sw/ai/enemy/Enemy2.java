@@ -147,7 +147,4 @@ public class Enemy2 implements EnemyInterface {
 		
 	}
 
-
-
-
 }

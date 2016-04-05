@@ -4,6 +4,7 @@ import ie.gmit.sw.ai.maze.Node;
 
 public class BinaryTreeMazeGenerator implements MazeGenerator 
 {
+	
 	// http://weblog.jamisbuck.org/2011/2/1/maze-generation-binary-tree-algorithm
 	// the simplest of the maze generation algorithms to implement,
 	// It can build the entire maze by looking at only a single cell at a time,
@@ -15,7 +16,6 @@ public class BinaryTreeMazeGenerator implements MazeGenerator
 		private Node [][] maze;
 		public BinaryTreeMazeGenerator() 
 		{
-
 		}
 		public Node[][] getTheMaze()
 		{

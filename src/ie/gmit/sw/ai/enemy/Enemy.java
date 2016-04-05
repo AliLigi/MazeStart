@@ -6,7 +6,7 @@ import ie.gmit.sw.ai.player.Player;
 ;
 
 public class Enemy  {
-	
+	//serching for the 2 types of ememies 
 		public enum SearchTypeOfEnemy {ASTARALGORITHM, DFSALGORITHM};
 		private boolean isLiving = true;
 		private Player player;

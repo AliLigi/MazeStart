@@ -1,5 +1,8 @@
 package ie.gmit.sw.ai.maze;
 
+
+// this is the template i used to create the other maze generators 
+// the one that was give in the little game created 
 public class MazeTemplate {
 	private char[][] maze;
 	public MazeTemplate(int rows, int cols){

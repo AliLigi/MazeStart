@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.*;
 public class Node 
 {
+	//http://www.tutorialspoint.com/java/java_multithreading.htmusing this website to help me with the threading 
 	public enum Direction {North, South, East, West};
 	private Node parent;
 	private boolean startingCell = false;
@@ -18,8 +19,18 @@ public class Node
 	private int dist;
 	private char nodeType;
 	private NodeTp nodeTp;
+	private boolean isGoalNode = false;
+	private boolean hasThePlayer = false;
+	
 	public boolean isStart() {
 		return isStarted;
+	}
+	
+	public boolean isHasThePlayer() {
+		return hasThePlayer;
+	}
+	public void setHasThePlayer(boolean hasThePlayer) {
+		this.hasThePlayer = hasThePlayer;
 	}
 
 	public List<Node> getAdjacentCells(Node[][] maze) {
@@ -30,6 +41,14 @@ public class Node
 		if(col-1 > 0) adjacentNodes.add(maze[row][col-2]); // Node to left
 		if(col+1 < maze[0].length-1) adjacentNodes.add(maze[row][col+2]); // Node to right
 		return adjacentNodes; 
+	}
+	
+	public boolean isGoalNodeEND() {
+		return isGoalNode;
+	}
+
+	public void setGoalNodeEND(boolean isGoalNode) {
+		this.isGoalNode = isGoalNode;
 	}
 	
 	public NodeTp getNodeType() {
@@ -147,6 +166,19 @@ public class Node
 		return adjacent;
 	}
 	
+	public ArrayList<Node> adjacentNodesFirst(Node[][] maze) {
+		
+		ArrayList<Node> adjacents = new ArrayList<Node>();
+		
+		if (row-1 > 0) adjacents.add(maze[row-2][col]); // Add North
+		if (row+1 < maze.length - 1) adjacents.add(maze[row + 2][col]); //Add South
+		if (col-1> 0) adjacents.add(maze[row][col-2]); // Add West
+		if (col+1 < maze[row].length - 1) adjacents.add(maze[row][col + 2]); //Add East
+
+		return adjacents;
+	
+}
+	
 	public Direction[] getPaths() {
 		return paths;
 	}
@@ -202,6 +234,8 @@ public class Node
 	public String toString() {
 		return "[" + row + "/" + col + "]";
 	}
+
+	
 }
 
 

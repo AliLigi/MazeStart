@@ -14,6 +14,7 @@ import ie.gmit.sw.ai.enemy.Enemy.SearchTypeOfEnemy;
 import ie.gmit.sw.ai.maze.EllersAlgoMaze;
 import ie.gmit.sw.ai.maze.MazeGenerator;
 import ie.gmit.sw.ai.maze.Node;
+//import ie.gmit.sw.ai.maze.RecursiveBacktrakingAlgo;
 import ie.gmit.sw.ai.player.Player;
 
 //import ie.gmit.sw.ai.maze.MazeTemplate;
@@ -41,6 +42,8 @@ public class GameRunner implements KeyListener{
 		//Node goalNode = m.getingNode();
     	view = new GameView(model);
     	goalNode = m.getingNode();
+    	view = new GameView(model);
+    	view.addingPlayer(player);
     	
     	placePlayer();
 		
@@ -89,16 +92,25 @@ public class GameRunner implements KeyListener{
 	
 	private void updateView()
 	{
-		view.setCurrentRow(currentRow);
-		view.setCurrentCol(currentCol);
-		player.setCurrentNode(model[currentRow][currentCol]);
-		
+		//looks camera movement if player health is below 0
+				if(player.getPlayersHealth() <= 0)
+				{
+					endGame();
+				}
+				else
+				{
+					view.setCurrentRow(currentRow);
+					view.setCurrentCol(currentCol);
+					player.setCurrentNode(model[currentRow][currentCol]);
+					
+				}
 	}
 	
-	
+	//this is searching between the 2 algorithms i am using for the enemy 
+	// between the Astar one and the DFS one 
 	private void createEnemy() {
 
-		for(int i = 1 ; i <= 4 ; i++)
+		for(int i = 1 ; i <= 8 ; i++)
 		{
 			Enemy.SearchTypeOfEnemy searching;
 			if(i % 2 == 0)
@@ -109,34 +121,42 @@ public class GameRunner implements KeyListener{
 			{
 				searching = SearchTypeOfEnemy.DFSALGORITHM;
 			}
+			int tempRow = 2;
+			int tempCol = 2;
 				
 			boolean isValid = false;
 			while(!isValid)
 			{
-				int tempRow = (int) (MAZE_DIMENSION * Math.random());
-				int tempCol = (int) (MAZE_DIMENSION * Math.random());
+				tempRow = (int) (MAZE_DIMENSION * Math.random());
+				tempCol = (int) (MAZE_DIMENSION * Math.random());
+				
 				if(model[tempRow][tempCol].getNodeTypes() == ' ')
 				{
 					isValid = true;
 				}
 			}
+			
+			int finalRow = tempRow;
+			int finalCol = tempCol;
 			Thread enemy = new Thread() 
 			{
-			    public void run() 
-			    {
-			        try 
-			        { 
-			        	System.out.println("NEW ENEMY");
-			        	Enemy enemy = new Enemy(player, searching, goalNode, model);
-			        	enemy.initTheHunter();        	
-			        } 
-			        catch(Exception e) 
-			        {
-			            System.out.println(e);
-			        }
-			    }  
-			};
-			enemy.start();
+				 public void run() 
+				    {
+				        try 
+				        { 
+				        	System.out.println("NEW ENEMY ADDED : " + searching + " TYPE OF ENEMY");
+				        	Enemy enemy = new Enemy(player, searching, model[finalRow][finalCol], model);
+				        	enemy.initTheHunter();
+				        } 
+				        catch(Exception e) 
+				        {
+				            System.out.println(e);
+				        }
+				       // return;
+				    }  
+				   
+				};
+				enemy.start();
 		}
 		
 	}
@@ -210,7 +230,22 @@ public class GameRunner implements KeyListener{
 			return false; //Can't move
 		}
 	}
-	
+	public void endGame()
+	{
+		//ends the game by triggers end screen 
+		view.triggerTheEndScreen();
+		try 
+		{ 
+			//Simulate processing each expanded node
+			Thread.sleep(5000);
+		}
+		catch (InterruptedException e) 
+		{
+			e.printStackTrace();
+		}
+		System.exit(0);
+		
+	}
 	
 	public static void main(String[] args) throws Exception{
 		new GameRunner();

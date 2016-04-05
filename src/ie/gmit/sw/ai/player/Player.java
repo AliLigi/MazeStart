@@ -1,16 +1,22 @@
 package ie.gmit.sw.ai.player;
 
 import ie.gmit.sw.ai.maze.Node;
+import net.sourceforge.jFuzzyLogic.FIS;
 
 public class Player {
 
 	private Node currentNode;
-	private Weapon weapon;
-	private int victory = 100;
-	
-	//public Player(Node currentNode) {
-	//	this.currentNode = currentNode;
-	//}
+	private int weapon;
+	private boolean Armed;
+	private int healthLife = 100;
+	private int playerMoves = 1;
+	private String fileName = "FCL/WeaponFuzzyLogic.fcl";
+	private FIS fis = FIS.load(fileName,true);
+
+	public int getMoves()
+	{
+		return playerMoves;
+	}
 	
 	public Node getCurrentNode() {
 		return currentNode;
@@ -18,27 +24,34 @@ public class Player {
 	
 	public void setCurrentNode(Node currentNode) {
 		this.currentNode = currentNode;
+		playerMoves++;
 	}
 	
-	public void addWeapon() {
-		weapon = new Weapon();
-	}
+	//public void addWeapon() {
+	//	weapon = new Weapon();
+	//}
 	
-	public int getEnemy() {
-		if (weapon!= null)	return weapon.getEnemy();
-		else return 0;
+	public int getWeapon() {
+		return weapon;
 	}
-	
-	public void setEnemy(int strenght) {
-		if (weapon != null) weapon.setEnemy(strenght);
+	public void setWeapon(int weapon) {
+		this.weapon = weapon;
 	}
 
-	public int getVictory() {
-		return victory;
+	public boolean Armed() {
+		return Armed;
+	}
+	public void setArmed(boolean Armed) {
+		this.Armed = Armed;
 	}
 
-	public void setVictory(int victory) {
-		this.victory = victory;
+	public int getPlayersHealth() {
+		return healthLife;
+		
+	}
+	
+	public void setPlayersHealth(int healthLife) {
+		this.healthLife = healthLife;
 	}
 
 }

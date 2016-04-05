@@ -85,7 +85,9 @@ public class Enemy  {
 
 	
 /* 
-	This is another way i tried to do the enemy 
+	//This is another way i tried to do the enemy 
+	//didnt function properly therefore i tried another way.
+	
 	private Player player;
 	private SearchType search;
 	private Node goalNode;

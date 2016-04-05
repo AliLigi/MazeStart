@@ -6,11 +6,16 @@ import java.awt.image.*;
 import javax.imageio.*;
 import javax.swing.*;
 
+import ie.gmit.sw.ai.enemy.Fight;
 import ie.gmit.sw.ai.maze.Node;
+import ie.gmit.sw.ai.player.Player;
 
 
 public class GameView extends JPanel implements ActionListener{
 	
+	//most of the code was already done in the sample maze game we received 
+	//I didn't get the time to add the enemies and the weapons to the game due to the time 
+	//I made a mistake thinking we had to give the project the next day..only realizing this 2 hrs before the deadline.
 	private static final long serialVersionUID = 1L;
 	public static final int DEFAULT_VIEW_SIZE = 800;	
 	private static final int IMAGE_COUNT = 10;
@@ -24,7 +29,10 @@ public class GameView extends JPanel implements ActionListener{
 	private int currentCol;
 	private boolean zoomOut = false;
 	private int imageIndex = -1;
+	private Fight fight = new Fight(DEFAULT_VIEW_SIZE);
 	private int size = DEFAULT_VIEW_SIZE/cellspan;
+	private Player player;
+	
 	
 	public GameView(Node[][] maze) throws Exception
 	{
@@ -68,7 +76,7 @@ public class GameView extends JPanel implements ActionListener{
 		}
 	}
 	
-	public void defineMapColours(int row, int col, Graphics2D g2)
+	public void defineMapColor(int row, int col, Graphics2D g2)
 	{
 		int x1 = col * size;
 		int y1 = row * size;
@@ -81,12 +89,12 @@ public class GameView extends JPanel implements ActionListener{
 		}
 		else if (ch == ' ')
 		{
-			g2.setColor(Color.BLACK);
+			g2.setColor(Color.BLUE);
 			g2.fillRect(x1, y1, size, size);
 		}
 		else if (ch == 'W')
 		{
-			g2.setColor(Color.BLUE);
+			g2.setColor(Color.BLACK);
 			g2.fillRect(x1, y1, size, size);
 		}
 		else if (ch == '?')
@@ -154,7 +162,7 @@ public class GameView extends JPanel implements ActionListener{
         		{
         			ch = maze[row][col].getNodeTypes();
         			size = DEFAULT_VIEW_SIZE/cellspan;
-        			defineMapColours(row, col, g2);
+        			defineMapColor(row, col, g2);
         		}
         		else
         		{
@@ -190,6 +198,14 @@ public class GameView extends JPanel implements ActionListener{
         		{
         			imageIndex = enemy_state;;       			
         		}
+        		else if (ch == 'G')
+        		{
+        			imageIndex = 7;;
+        		}
+        		else if (ch == 'V')
+        		{
+        			imageIndex = 8;;
+        		}
         		else
         		{
         			imageIndex = -1;
@@ -208,6 +224,16 @@ public class GameView extends JPanel implements ActionListener{
         }
 	}
 	
+	public void triggerTheEndScreen() {
+		fight.setGameFinished(true);
+		
+	}
+	
+	public void addingPlayer(Player player) {
+		this.player = player;
+		
+	}
+	
 	public void toggleZoom()
 	{
 		zoomOut = !zoomOut;		
@@ -217,11 +243,11 @@ public class GameView extends JPanel implements ActionListener{
 	{	
 		if (enemy_state < 0 || enemy_state == 5)
 		{
-			enemy_state = 5;
+			enemy_state = 6;
 		}
 		else
 		{
-			enemy_state = 6;
+			enemy_state = 5;
 		}
 		
 		this.repaint();
@@ -234,10 +260,11 @@ public class GameView extends JPanel implements ActionListener{
 		images[2] = ImageIO.read(new java.io.File("resources/help.png"));
 		images[3] = ImageIO.read(new java.io.File("resources/bomb.png"));
 		images[4] = ImageIO.read(new java.io.File("resources/h_bomb.png"));
-		//images[7] = ImageIO.read(new java.io.File("resources/spidermanUp.png"));
-		//images[8] = ImageIO.read(new java.io.File("resources/spiderManDown.png"));
 		images[5] = ImageIO.read(new java.io.File("resources/spider_down.png"));
 		images[6] = ImageIO.read(new java.io.File("resources/spider_up.png"));
+		//images[7] = ImageIO.read(new java.io.File("resources/spidermanUp.png"));
+		//images[8] = ImageIO.read(new java.io.File("resources/spiderManDown.png"));
 		
 	}
+	
 }

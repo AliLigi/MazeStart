@@ -14,87 +14,132 @@ public class RecursiveBacktrakingAlgo implements MazeGenerator{
 	
 		private Random r = new Random();
 		private Node[][] maze;
-		private Set<Node> startCell = new HashSet<Node>();
-		private Set<Node> unvisitNode = new HashSet<Node>();
+		private List<Node> startCell = new ArrayList<Node>();
+		//private Set<Node> unvisitNode = new HashSet<Node>();
+		private Node goalNode;
 		
-		
+		/*
 		public RecursiveBacktrakingAlgo(Node[][] maze) {
 			super();
 			this.maze = maze;
 			//buildTheMaze();
-		}
+		}*/
 		public Node[][] getTheMaze() {
 			return this.maze;
 		}
-
 		
-		// Initializing each Node
-		// Starting  maze in grid pattern
-		private void init(){
-			int rowCounter = 0; int colCounter =0;
-			int row = 0; int col = 0;
-			for (row = 0; row < maze.length; row++){
-				rowCounter++;
-				for (col = 0; col < maze[row].length; col++){
-					maze[row][col] = new Node(col, row);
-					maze[row][col].setRow(row); maze[row][col].setCol(col);
-					colCounter++;
-					if(row < 1 || col < 1 
-							|| row > maze.length-1 
-							|| col > maze[0].length-1) maze[row][col].setNodeType(NodeTp.wall);
-					else if(colCounter % 2 == 0 && rowCounter % 2 == 0)  {
-						maze[row][col].setNodeType(NodeTp.floor);
-						maze[row][col].setStartingCell(true);
-						startCell.add(maze[row][col]);
-						colCounter = 0;
-					} else {
-						maze[row][col].setNodeType(NodeTp.wall);
+		public void buildTheMaze(int rows, int cols) {
+			
+			init();
+			maze = new Node[rows][cols];
+			int randomNode = r.nextInt(startCell.size() -1 );
+			Node startNode = startCell.get(randomNode);
+			Node currentNode = startNode;
+			Stack<Node> nodes = new Stack<Node>();
+			boolean firstNode = true;
+			ArrayList<Node> adjNodes = new ArrayList<Node>();
+			ArrayList<Node> validNeighbours = new ArrayList<Node>();
+			nodes.push(currentNode);
+			
+			//Another way of writing  the RecursiveALGORITHM
+			//unvisitNode = startCell;
+			//Stack<Node> nodeStack = new Stack<Node>();
+			//List<Node> unvisitedNeighbours = new ArrayList<Node>();
+			//int randIndex = r.nextInt(startCell.size());
+			//int i = 0;
+			// Initial Node
+			//Node currentNode;
+			//Node startingNode = new Node(cols, rows);
+			
+			do {
+				if(currentNode.isStart() == true)
+				{
+					adjNodes = currentNode.adjacentNodesFirst(maze);
+					firstNode = false;
+				}
+				else
+				{
+					adjNodes = currentNode.adjacentNodes(maze);
+				}
+				
+				//List<Node> adjacentNodes = currentNode.getAdjacentCells(maze);
+				for (Node node : adjNodes) {
+					if(!node.isVisited()) {
+						validNeighbours.add(node);
 					}
+				}
+				if (validNeighbours.size() > 0) {
+					//int nextCellIndex = r.nextInt(unvisitedNeighbours.size());
+					
+					Node nextNode = validNeighbours.get(r.nextInt(validNeighbours.size()));
+					//nodeStack.push(currentNode);
+					
+					Node wallNode = getWall(currentNode, maze[nextNode.getRow()][nextNode.getCol()]);
+					//wallNode.setNodeType(NodeTp.floor);
+					wallNode.setNodeTypes(' ');
+					nodes.push(currentNode);
+					currentNode.setVisited(true);
+					//unvisitNode.remove(currentNode);
+					//currentNode = nextNode;
+					//unvisitedNeighbours.clear();
+					
+					currentNode = nextNode;	
+					currentNode.setVisited(true);
+
+					validNeighbours.clear();
+					
+				} else if (!nodes.isEmpty()) {
+					//currentNode = nodes.pop();
+					Node newOne = nodes.pop();
+					currentNode = newOne;
+				}
+			}
+			while (currentNode != startNode && !nodes.isEmpty());
+			newFetures(rows, cols);
+			addGoalNode();
+		}
+		
+		private void newFetures(int rows, int cols)
+		{
+			int featuredNumber = (int)((rows * cols) * 0.01);	
+			addNewFeature('W', 'X', featuredNumber);
+			addNewFeature('?', 'X', featuredNumber);
+			addNewFeature('B', 'X', featuredNumber);
+			
+		}
+		private void addNewFeature(char feature, char replace, int number)
+		{
+			int counter = 0;
+			while (counter < number)
+			{
+				int row = (int)(maze.length * Math.random());
+				int col = (int) (maze[0].length * Math.random());
+				
+				if (maze[row][col].getNodeTypes() != ' ')
+				{
+					maze[row][col].setNodeTypes(feature);
+					counter++;
 				}
 			}
 		}
-		
-		public void buildTheMaze(int rows, int cols) {
-			init();
-			unvisitNode = startCell;
-			Stack<Node> nodeStack = new Stack<Node>();
-			List<Node> unvisitedNeighbours = new ArrayList<Node>();
-			int randIndex = r.nextInt(startCell.size());
-			int i = 0;
-			// Initial Node
-			Node currentNode;
-			Node startingNode = new Node(cols, rows);
-			
-			for(Node cell : startCell) {
-				if (i == randIndex) startingNode = cell;
-				else i++;
-			}
-			currentNode = startingNode;
-			do {
-				currentNode.setVisited(true);
+		private void addGoalNode()
+		{
+			boolean isValid = false;
+			int row = 1;
+			int col = 1;
+			while(!isValid)
+			{
+				row = (int)(maze.length * Math.random());
+				col = (int) (maze.length * Math.random());
 				
-				List<Node> adjacentNodes = currentNode.getAdjacentCells(maze);
-				// Get list of unvisited cell
-				for (Node node : adjacentNodes) {
-					if(!node.isVisited()) {
-						unvisitedNeighbours.add(node);
-					}
-				}
-				if (unvisitedNeighbours.size() > 0) {
-					int nextCellIndex = r.nextInt(unvisitedNeighbours.size());
-					Node nextNode = unvisitedNeighbours.get(nextCellIndex);
-					nodeStack.push(currentNode);
-					
-					Node wallNode = getWall(currentNode, nextNode);
-					wallNode.setNodeType(NodeTp.floor);
-					unvisitNode.remove(currentNode);
-					currentNode = nextNode;
-					unvisitedNeighbours.clear();
-				} else if (!nodeStack.isEmpty()) {
-					currentNode = nodeStack.pop();
+				if(maze[row][col].getNodeTypes() != ' ')
+				{
+					isValid = true;
 				}
 			}
-			while (currentNode != startingNode && !nodeStack.isEmpty());
+			maze[row][col].setGoalNode(true);
+			maze[row][col].setNodeTypes('G');
+			goalNode = maze[row][col];
 		}
 		
 		private Node getWall(Node n1, Node n2) {
@@ -114,10 +159,54 @@ public class RecursiveBacktrakingAlgo implements MazeGenerator{
 			}
 			return wall;
 		}
-		@Override
+		// Initializing each Node
+		// Starting  maze in grid pattern
+		private void init()
+		{
+			int row = 0; int col = 0;
+			for ( row = 0; row < maze.length; row ++)
+			{
+				for ( col = 0; col < maze[row].length; col++)
+				{
+					maze[row][col] = new Node(row, col);
+					if(row % 2 == 0 || col % 2 == 0)
+					{
+						maze[row][col].setNodeTypes('X');
+					}
+					else
+					{
+						maze[row][col].setNodeTypes(' ');
+						maze[row][col].setStart(true);
+						startCell.add(maze[row][col]);
+					}
+				}
+			}
+			/*int rowCounter = 0; int colCounter =0;
+			int row = 0; int col = 0;
+			for (row = 0; row < maze.length; row++){
+				rowCounter++;
+				for (col = 0; col < maze[row].length; col++){
+					maze[row][col] = new Node(col, row);
+					maze[row][col].setRow(row); maze[row][col].setCol(col);
+					colCounter++;
+					if(row < 1 || col < 1 
+							|| row > maze.length-1 
+							|| col > maze[0].length-1) maze[row][col].setNodeType(NodeTp.wall);
+					else if(colCounter % 2 == 0 && rowCounter % 2 == 0)  {
+						maze[row][col].setNodeType(NodeTp.floor);
+						maze[row][col].setStartingCell(true);
+						startCell.add(maze[row][col]);
+						colCounter = 0;
+					} else {
+						maze[row][col].setNodeType(NodeTp.wall);
+					}
+				}
+			}*/
+		}
+		
 		public Node getingNode() {
 			// TODO Auto-generated method stub
-			return null;
+			return goalNode;
 		}
 
 		

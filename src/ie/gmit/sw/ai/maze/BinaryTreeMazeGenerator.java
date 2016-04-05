@@ -17,17 +17,21 @@ public class BinaryTreeMazeGenerator implements MazeGenerator
 		{
 
 		}
+		public Node[][] getTheMaze()
+		{
+			return this.maze;
+		}
 
 		public void buildTheMaze(int rows, int cols)
 		{
 			maze = new Node[rows][cols];
 			init();
 			
-			int featureNumber = (int)((rows * cols) * 0.01);	
-			addFeature('W', 'X', featureNumber);
-			addFeature('?', 'X', featureNumber);
-			addFeature('B', 'X', featureNumber);
-			addFeature('H', 'X', featureNumber);
+			int featuredNumber = (int)((rows * cols) * 0.01);	
+			addNewFeature('W', 'X', featuredNumber);
+			addNewFeature('?', 'X', featuredNumber);
+			addNewFeature('B', 'X', featuredNumber);
+			addNewFeature('H', 'X', featuredNumber);
 			
 			for (int row = 1; row < maze.length -1 ; row ++)
 			{
@@ -64,7 +68,7 @@ public class BinaryTreeMazeGenerator implements MazeGenerator
 			}
 		}
 
-		private void addFeature(char feature, char replace, int number)
+		private void addNewFeature(char feature, char replace, int number)
 		{
 			int counter = 0;
 			while (counter < number)
@@ -79,10 +83,7 @@ public class BinaryTreeMazeGenerator implements MazeGenerator
 				}
 			}
 		}
-		public Node[][] getTheMaze()
-		{
-			return this.maze;
-		}
+		
 
 		@Override
 		public Node getingNode() {
